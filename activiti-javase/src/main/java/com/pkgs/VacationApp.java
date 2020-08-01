@@ -8,6 +8,7 @@ package com.pkgs;
 import com.alibaba.fastjson.JSON;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,12 +39,12 @@ import lombok.extern.slf4j.Slf4j;
 public class VacationApp {
 
     public static String classMonitor = "haiyan";
-    public static String gradeMonitor = "mr3306";
+    public static String gradeMonitor = "mr3306,mr3307";
 
     /**
-     * 显示场景里面,只会发布一次,觉得,卧槽
+     * 现实场景里面,如果没改动过流程,只需要发布一次,而不用每次调用都重新发布一次
      */
-    public static String deployId = "1";
+    public static boolean isAlreadyDeploy = true;
 
     /**
      * 并不是每次都要重新发布加载的
@@ -90,21 +91,23 @@ public class VacationApp {
     }
 
     public static void deployIfNecessary(ProcessEngine processEngine) {
-        RepositoryService repositoryService = processEngine.getRepositoryService();
-
-        if (null == deployId || "".equals(deployId)) {
-            Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("workflow/vacation.bpmn20.xml").deploy();
-            deployId = deployment.getId();
-
-            log.info("Function[deployIfNecessary] deploy process,id:{}", deployId);
+        if (isAlreadyDeploy) {
+            return;
         }
+
+        RepositoryService repositoryService = processEngine.getRepositoryService();
+        Deployment deployment = repositoryService.createDeployment()
+            .addClasspathResource("workflow/vacation.bpmn20.xml").deploy();
+        String deployId = deployment.getId();
+
+        log.info("Function[deployIfNecessary] deploy process,id:{}", deployId);
 
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployId)
             .singleResult();
 
         log.info("Function[deployIfNecessary] found id:{},name:{}", processDefinition.getId(),
             processDefinition.getName());
+
     }
 
     /**
@@ -130,7 +133,7 @@ public class VacationApp {
             // 启动流程
             ProcessInstance instance = runtimeService.startProcessInstanceByKey("vacation", studentNo, map);
 
-            // 完成第一步申请
+            // 完成第一步申请,这个processId应该存放进业务表,方便查询使用
             String processId = instance.getId();
             Task task = taskService.createTaskQuery().processInstanceId(processId).singleResult();
 
@@ -169,7 +172,9 @@ public class VacationApp {
             map.put("audit", true);
             map.put("comment", "班主任同意");
             map.put("classMonitor", classMonitor);
-            map.put("gradeMonitor", gradeMonitor);
+            //ap.put("gradeMonitor", "3306");
+            List<String> list = Arrays.asList(gradeMonitor.split(","));
+            map.put("gradeMonitorList", list);
             map.put("applyInfo", applyInfo);
 
             // 同意学生请假
@@ -188,8 +193,7 @@ public class VacationApp {
      */
     public static void gradeAudit(ProcessEngine processEngine) {
         TaskService taskService = processEngine.getTaskService();
-        List<Task> tasks = taskService.createTaskQuery().taskAssignee(gradeMonitor).orderByTaskCreateTime().desc()
-            .list();
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee("mr3307").orderByTaskCreateTime().desc().list();
 
         for (Task task : tasks) {
             // 获取上一个任务传递过来的参数

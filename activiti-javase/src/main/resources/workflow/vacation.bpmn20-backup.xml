@@ -10,14 +10,11 @@
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
       </extensionElements>
     </userTask>
-    <userTask id="gradeAudit" name="级主任审批" activiti:assignee="${gradeMonitorValue}">
+    <userTask id="gradeAudit" name="级主任审批" activiti:assignee="${gradeMonitor}">
       <extensionElements>
         <activiti:taskListener event="complete" class="com.pkgs.listener.VacationTaskListener"></activiti:taskListener>
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
       </extensionElements>
-      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${gradeMonitorList}" activiti:elementVariable="gradeMonitorValue">
-        <completionCondition>${nrOfCompletedInstances&gt;0}</completionCondition>
-      </multiInstanceLoopCharacteristics>
     </userTask>
     <exclusiveGateway id="sid-3FC5E931-3647-4A80-BE58-D777D2159392"></exclusiveGateway>
     <sequenceFlow id="sid-C297E320-8846-4684-AADB-27FCEB2F7694" sourceRef="vacationApply" targetRef="firstAudit"></sequenceFlow>
