@@ -5,16 +5,18 @@
  */
 package com.pkgs.listener;
 
-import com.alibaba.fastjson.JSON;
+import com.pkgs.model.request.MessageRequest;
+import com.pkgs.service.MessageService;
 
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,23 +24,12 @@ import lombok.extern.slf4j.Slf4j;
  * @version V1.0
  * @since 2020-07-31 09:27
  */
-@Service
+@Component
 @Slf4j
 public class VacationTaskListener implements TaskListener {
 
-    @Data
-    public static class EventMessage {
-        private String taskName;
-        private String assignee;
-        private String studentNo;
-        private Boolean agree;
-        private String comment;
-
-        @Override
-        public String toString() {
-            return JSON.toJSONString(this);
-        }
-    }
+    @Resource
+    private MessageService messageService;
 
     @Override
     public void notify(DelegateTask delegateTask) {
@@ -55,7 +46,7 @@ public class VacationTaskListener implements TaskListener {
         Object audit = variables.get("audit");
         Object comment = variables.get("comment");
 
-        EventMessage eventMessage = new EventMessage();
+        MessageRequest eventMessage = new MessageRequest();
         eventMessage.setAgree(Boolean.TRUE.equals(audit));
         eventMessage.setComment(String.valueOf(comment));
         eventMessage.setStudentNo(studentNo);
@@ -63,10 +54,7 @@ public class VacationTaskListener implements TaskListener {
         eventMessage.setTaskName(taskName);
 
         // 通知学生最新进度
-        sendNotifyMessage(eventMessage);
+        messageService.send(eventMessage);
     }
 
-    public static void sendNotifyMessage(EventMessage eventMessage) {
-        log.info("Function[sendNotifyMessage] message:{}", JSON.toJSONString(eventMessage, true));
-    }
 }

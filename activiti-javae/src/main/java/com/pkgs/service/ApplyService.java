@@ -6,6 +6,7 @@
 package com.pkgs.service;
 
 import com.alibaba.fastjson.JSON;
+import com.pkgs.conf.WorkflowConf;
 import com.pkgs.model.request.ApplyRequest;
 import com.pkgs.model.response.BaseResponse;
 import com.pkgs.util.BeanMapUtil;
@@ -35,6 +36,8 @@ public class ApplyService {
     private RuntimeService runtimeService;
     @Resource
     private TaskService taskService;
+    @Resource
+    private WorkflowConf workflowConf;
 
     public BaseResponse apply(ApplyRequest request) {
 
@@ -43,7 +46,7 @@ public class ApplyService {
 
         // 启动流程,指定申请学生
         ProcessInstance instance = runtimeService
-            .startProcessInstanceByKey("vacation", request.getApplyStudent(), applyInfoMap);
+            .startProcessInstanceByKey(workflowConf.getVacationKey(), request.getApplyStudent(), applyInfoMap);
 
         // 完成第一步申请,这个processId应该存放进业务表,方便查询使用
         String processId = instance.getId();
