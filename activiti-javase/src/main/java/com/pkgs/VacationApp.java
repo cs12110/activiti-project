@@ -57,13 +57,13 @@ public class VacationApp {
             ProcessEngine processEngine = loadProcessEngine();
 
             // 学生请假
-            studentApply(processEngine);
-
-            // 班主任审批
-            classAudit(processEngine);
+//            studentApply(processEngine);
+//
+//            // 班主任审批
+//            classAudit(processEngine);
 
             // 级主任审批
-            gradeAudit(processEngine);
+            //gradeAudit(processEngine);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,12 +125,13 @@ public class VacationApp {
             String studentNo = "cs121" + index;
 
             Map<String, Object> map = new HashMap<>(8);
+            // 对应申请节点的参数
             map.put("applyStudent", studentNo);
             map.put("days", days[index]);
             map.put("reason", "卧槽,批假呀");
             map.put("classMonitor", classMonitor);
 
-            // 启动流程
+            // 启动流程,指定申请学生
             ProcessInstance instance = runtimeService.startProcessInstanceByKey("vacation", studentNo, map);
 
             // 完成第一步申请,这个processId应该存放进业务表,方便查询使用
@@ -193,7 +194,7 @@ public class VacationApp {
      */
     public static void gradeAudit(ProcessEngine processEngine) {
         TaskService taskService = processEngine.getTaskService();
-        List<Task> tasks = taskService.createTaskQuery().taskAssignee("mr3307").orderByTaskCreateTime().desc().list();
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee("mr3306").orderByTaskCreateTime().desc().list();
 
         for (Task task : tasks) {
             // 获取上一个任务传递过来的参数
