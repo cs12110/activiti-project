@@ -15,8 +15,10 @@ import javax.annotation.Resource;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
+import org.activiti.engine.impl.el.FixedValue;
 import org.springframework.stereotype.Component;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -26,10 +28,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Component
 @Slf4j
+@Data
 public class VacationTaskListener implements TaskListener {
 
     @Resource
     private MessageService messageService;
+
+    /**
+     * 通过task设置传递值进来
+     */
+    private FixedValue fixedValue;
+
+    private FixedValue otherValue;
 
     @Override
     public void notify(DelegateTask delegateTask) {
@@ -52,6 +62,12 @@ public class VacationTaskListener implements TaskListener {
         eventMessage.setStudentNo(studentNo);
         eventMessage.setAssignee(assignee);
         eventMessage.setTaskName(taskName);
+
+        // 获取从taskListener设置的数据值
+        Object fixedValueVal = fixedValue.getValue(delegateTask);
+        Object otherValueVal = otherValue.getValue(delegateTask);
+
+        log.info("Function[notify] fixed value:{},other value:{}", fixedValueVal, otherValueVal);
 
         // 通知学生最新进度
         messageService.send(eventMessage);
