@@ -1,8 +1,3 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs.ctrl;
 
 import com.pkgs.model.response.BaseResponse;
@@ -18,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-08-02 12:04
  */

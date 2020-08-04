@@ -1,15 +1,10 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-08-02 13:30
  */

@@ -1,8 +1,3 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -11,7 +6,7 @@ import org.activiti.engine.delegate.ExecutionListener;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-07-31 09:27
  */

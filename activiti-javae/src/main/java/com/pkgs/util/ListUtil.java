@@ -1,8 +1,3 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs.util;
 
 import java.util.Collections;
@@ -12,7 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-08-02 12:48
  */

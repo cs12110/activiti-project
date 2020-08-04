@@ -1,8 +1,3 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs.util;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +11,7 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-08-02 12:30
  */

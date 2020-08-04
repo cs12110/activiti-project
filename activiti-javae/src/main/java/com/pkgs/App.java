@@ -1,8 +1,3 @@
-/*
- *
- * This software is the confidential and proprietary information of sipai Company.
- *
- */
 package com.pkgs;
 
 import org.activiti.spring.boot.SecurityAutoConfiguration;
@@ -12,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  *
  *
- * @author huapeng.huang@medbanks.cn
+ * @author huapeng.huang
  * @version V1.0
  * @since 2020-08-02 11:55
  */
